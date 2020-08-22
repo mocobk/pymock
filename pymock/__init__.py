@@ -94,9 +94,31 @@ class Mock:
         self.__ctx = MiniRacer()
         self.__ctx.eval(self.__code)
 
-    def mock(self, template: typing.Union[dict, list, str]) -> typing.Union[dict, list, str]:
+    def mock(self,
+             template: typing.Union[dict, list, str],
+             encoder=JSONEncoder,
+             timeout=0,
+             max_memory=0) -> typing.Union[dict, list, str]:
         """
-        :param template: mock template
-        :return: dict, list
+        Mock from python object
+        :param template: Mock template
+        :param encoder: You can pass a custom JSON encoder by passing it in the encoder
+        :param timeout: Limit run timeout, default no limit: timeout = 0(millisecond)
+        :param max_memory: Limit max memory, default no limit: max_memory = 0
+        :return: dict, list, str
         """
-        return self.__ctx.call('Mock.mock', template, encoder=JSONEncoder)
+        return self.__ctx.call('Mock.mock', template, encoder=encoder, timeout=timeout, max_memory=max_memory)
+
+    def mock_js(self,
+                js_str: str,
+                timeout=0,
+                max_memory=0) -> typing.Union[dict, list, str]:
+        """
+        Mock form JSON string or JavaScript Object like-string
+        :param js_str: Mock template
+        :param timeout: Limit run timeout, default no limit: timeout = 0(millisecond)
+        :param max_memory: Limit max memory, default no limit: max_memory = 0
+        :return: dict, list, str
+        """
+        js = "Mock.mock({template})".format(template=js_str)
+        return self.__ctx.eval(js, timeout, max_memory)

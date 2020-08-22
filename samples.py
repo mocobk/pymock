@@ -9,7 +9,6 @@ from pymock import Mock
 
 Mock = Mock()
 
-
 pprint(Mock.mock('@csentence 变量示例'))
 
 pprint(Mock.mock({
@@ -33,14 +32,23 @@ pprint(Mock.mock({
     'regexp4': r'\/\d{5,10}\/'  # output raw regexp with escape slash
 }))
 
-
 pprint(Mock.mock({
-        'name': {
-            'first': '@first',
-            'middle': '@first',
-            'last': '@last',
-            'email': 'example\\@gmail.com',
-            'full': '@first @middle @last'
-        }
+    'name': {
+        'first': '@first',
+        'middle': '@first',
+        'last': '@last',
+        'email': 'example\\@gmail.com',
+        'full': '@first @middle @last'
     }
+}
 ))
+
+pprint(Mock.mock_js("""
+{
+    name: {
+        first: "@cfirst", 
+        last: "@clast",
+        name: "@first@last",
+    }
+}
+"""))

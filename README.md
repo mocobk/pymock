@@ -96,4 +96,21 @@ pprint(Mock.mock({
           'middle': 'Nancy'}}
 ```
 
+You can also Mock form JSON string or JavaScript Object like-string
+```python
+pprint(Mock.mock_js("""
+{
+    name: {
+        first: "@cfirst", 
+        last: "@clast",
+        name: "@first@last",
+    }
+}
+"""))
+```
+
+```
+{'name': {'first': '卢', 'last': '强', 'name': '卢强'}}
+```
+
 [更多示例](http://mockjs.com/examples.html)
