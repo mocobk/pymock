@@ -9,6 +9,9 @@ from pymock import Mock
 
 Mock = Mock()
 
+
+pprint(Mock.mock('@csentence 变量示例'))
+
 pprint(Mock.mock({
     'list|1-10': [{
         'id|+1': 1,
@@ -26,8 +29,10 @@ pprint(Mock.mock(Mock.mock({
 pprint(Mock.mock({
     'regexp1': r'/[a-z][A-Z][0-9]/',
     'regexp2': r'/\w\W\s\S\d\D/',
-    'regexp3': r'/\d{5,10}/'
+    'regexp3': r'/\d{5,10}/',
+    'regexp4': r'\/\d{5,10}\/'  # output raw regexp with escape slash
 }))
+
 
 pprint(Mock.mock({
         'name': {
@@ -39,17 +44,3 @@ pprint(Mock.mock({
         }
     }
 ))
-
-# JS object like string
-pprint(Mock.mock(
-    """{
-        name: {
-            first: '@cfirst',
-            middle: '@cfirst',
-            last: '@clast',
-            email: 'example\\@gmail.com',
-            full: '@first@middle@last'
-        }
-    }"""
-))
-

@@ -4,13 +4,13 @@
 # @Email  : mailmzb@qq.com
 # @Time   : 2020/8/18 19:12
 import codecs
-import json
-import json.encoder
 import os
 import re
 import typing
+from json.encoder import encode_basestring_ascii, encode_basestring, INFINITY, c_make_encoder, _make_iterencode, \
+    JSONEncoder as _JSONEncoder
 
-from py_mini_racer import py_mini_racer
+from py_mini_racer.py_mini_racer import MiniRacer
 
 __JS_REGEX_PATTERN = re.compile(r'^/.*/$')
 __JS_REGEX_ESCAPE_PATTERN = re.compile(r'^\\/.*\\/$')
@@ -23,32 +23,68 @@ def encode_regex_basestring_wrap(func):
         else:
             if __JS_REGEX_ESCAPE_PATTERN.match(string):
                 string = f'/{string[2:-2]}/'
-            return func(string)
+        return func(string)
 
     return wrap
 
 
-json.encoder.encode_basestring = encode_regex_basestring_wrap(json.encoder.encode_basestring)
-json.encoder.encode_basestring_ascii = encode_regex_basestring_wrap(json.encoder.encode_basestring_ascii)
+class JSONEncoder(_JSONEncoder):
+    """For support js regex str"""
 
+    def iterencode(self, o, _one_shot=False):
+        """Encode the given object and yield each string
+        representation as available.
 
-class MiniRacer(py_mini_racer.MiniRacer):
-    def call(self, identifier, *args, **kwargs):
-        """ Call the named function with provided arguments
-        You can pass a custom JSON encoder by passing it in the encoder
-        keyword only argument.
+        For example::
+
+            for chunk in JSONEncoder().iterencode(bigobject):
+                mysocket.write(chunk)
+
         """
-
-        encoder = kwargs.get('encoder', None)
-        timeout = kwargs.get('timeout', 0)
-        max_memory = kwargs.get('max_memory', 0)
-
-        if isinstance(args[0], (dict, list)):
-            json_args = json.dumps(args, separators=(',', ':'), cls=encoder)
+        if self.check_circular:
+            markers = {}
         else:
-            json_args = f'[{args[0]}]'
-        js = "{identifier}.apply(this, {json_args})"
-        return self.eval(js.format(identifier=identifier, json_args=json_args), timeout, max_memory)
+            markers = None
+        if self.ensure_ascii:
+            # For support js regex str
+            _encoder = encode_regex_basestring_wrap(encode_basestring_ascii)
+        else:
+            _encoder = encode_regex_basestring_wrap(encode_basestring)
+
+        def floatstr(o, allow_nan=self.allow_nan,
+                     _repr=float.__repr__, _inf=INFINITY, _neginf=-INFINITY):
+            # Check for specials.  Note that this type of test is processor
+            # and/or platform-specific, so do tests which don't depend on the
+            # internals.
+
+            if o != o:
+                text = 'NaN'
+            elif o == _inf:
+                text = 'Infinity'
+            elif o == _neginf:
+                text = '-Infinity'
+            else:
+                return _repr(o)
+
+            if not allow_nan:
+                raise ValueError(
+                    "Out of range float values are not JSON compliant: " +
+                    repr(o))
+
+            return text
+
+        if (_one_shot and c_make_encoder is not None
+                and self.indent is None):
+            _iterencode = c_make_encoder(
+                markers, self.default, _encoder, self.indent,
+                self.key_separator, self.item_separator, self.sort_keys,
+                self.skipkeys, self.allow_nan)
+        else:
+            _iterencode = _make_iterencode(
+                markers, self.default, _encoder, self.indent, floatstr,
+                self.key_separator, self.item_separator, self.sort_keys,
+                self.skipkeys, _one_shot)
+        return _iterencode(o, 0)
 
 
 class Mock:
@@ -58,9 +94,9 @@ class Mock:
         self.__ctx = MiniRacer()
         self.__ctx.eval(self.__code)
 
-    def mock(self, template: typing.Union[dict, list, str]) -> typing.Union[dict, list]:
+    def mock(self, template: typing.Union[dict, list, str]) -> typing.Union[dict, list, str]:
         """
         :param template: mock template
         :return: dict, list
         """
-        return self.__ctx.call('Mock.mock', template)
+        return self.__ctx.call('Mock.mock', template, encoder=JSONEncoder)

@@ -25,6 +25,13 @@ from pymock import Mock
 
 Mock = Mock()
 
+pprint(Mock.mock('@csentence 变量示例'))
+```
+```
+'何思许型面率儿相算加阶角难角看有资。 变量示例'
+```
+
+```python
 pprint(Mock.mock({
     'list|1-10': [{
         'id|+1': 1,
@@ -58,12 +65,17 @@ pprint(Mock.mock(Mock.mock({
 pprint(Mock.mock({
     'regexp1': r'/[a-z][A-Z][0-9]/',
     'regexp2': r'/\w\W\s\S\d\D/',
-    'regexp3': r'/\d{5,10}/'
+    'regexp3': r'/\d{5,10}/',
+    'regexp4': r'\/\d{5,10}\/'  # output raw regexp with escape slash
 }))
 ```
 ```
-{'regexp1': 'mM8', 'regexp2': 'I;\rI5j', 'regexp3': '575824'}
+{'regexp1': 'xP9',
+ 'regexp2': 'B \xa0V7O',
+ 'regexp3': '98356203',
+ 'regexp4': '/\\d{5,10}/'}
 ```
+
 ```python
 pprint(Mock.mock({
         'name': {
@@ -82,27 +94,6 @@ pprint(Mock.mock({
           'full': 'Nancy Nancy Lee',
           'last': 'Lee',
           'middle': 'Nancy'}}
-```
-```python
-# JS object like string
-pprint(Mock.mock(
-    """{
-        name: {
-            first: '@cfirst',
-            middle: '@cfirst',
-            last: '@clast',
-            email: 'example\\@gmail.com',
-            full: '@first@middle@last'
-        }
-    }"""
-))
-```
-```
-{'name': {'email': 'example@gmail.com',
-          'first': '萧',
-          'full': '萧白强',
-          'last': '强',
-          'middle': '白'}}
 ```
 
 [更多示例](http://mockjs.com/examples.html)
