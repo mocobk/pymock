@@ -9,7 +9,7 @@ with open("README.md", "r", encoding='utf-8') as fh:
 
 setuptools.setup(
     name="py-mock",
-    version="1.1.0",
+    version="1.1.1",
     author="mocobk",
     author_email="mailmzb@qq.com",
     description="Mock.js for Python3",

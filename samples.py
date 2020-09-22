@@ -52,3 +52,27 @@ pprint(Mock.mock_js("""
     }
 }
 """))
+
+pprint(Mock.mock({
+    'random': {
+        'name': [
+            '@name',
+            '@cname'
+        ],
+        'image': [
+            # @image( size, background, foreground, format, text )
+            "@image",
+            "@image('300x400')",
+            "@image('300x400', '占位图文字')",
+            "@image('300x400', '#234567', '#FFFFFF', 'png', 'HelloWorld')"
+        ],
+        'emoji': [
+            # emoji( pool, min, max )
+            "@emoji",
+            "@emoji('😀😁😂😃😄')",
+            "@emoji(3, 6)",
+            "@emoji('123🌘😷🙊★♠♫', 3, 6)"
+        ]
+    }
+}
+))

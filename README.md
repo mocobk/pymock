@@ -96,6 +96,40 @@ pprint(Mock.mock({
           'middle': 'Nancy'}}
 ```
 
+```python
+pprint(Mock.mock({
+    'random': {
+        'name': [
+            '@name',
+            '@cname'
+        ],
+        'image': [
+            # @image( size, background, foreground, format, text )
+            "@image",
+            "@image('300x400')",
+            "@image('300x400', '占位图文字')",
+            "@image('300x400', '#234567', '#FFFFFF', 'png', 'HelloWorld')"
+        ],
+        'emoji': [
+            # emoji( pool, min, max )
+            "@emoji",
+            "@emoji('😀😁😂😃😄')",
+            "@emoji(3, 6)",
+            "@emoji('123🌘😷🙊★♠♫', 3, 6)"
+        ]
+    }
+}
+))
+```
+```
+{'random': {'emoji': ['🌛', '😀', '👲🌐👧🍢🌂🐁', '♫1★🙊'],
+            'image': ['https://iph.href.lu/400x300?bg=&fg=&text=',
+                      'https://iph.href.lu/300x400?bg=&fg=&text=',
+                      'https://iph.href.lu/300x400?bg=&fg=&text=占位图文字',
+                      'https://dummyimage.com/300x400/234567/FFFFFF.png?text=HelloWorld'],
+            'name': ['Mary Thompson', '高刚']}}
+```
+
 You can also Mock form JSON string or JavaScript Object like-string
 ```python
 pprint(Mock.mock_js("""
