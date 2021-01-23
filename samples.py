@@ -70,7 +70,7 @@ pprint(Mock.mock({
             # emoji( pool, min, max )
             "@emoji",
             "@emoji('😀😁😂😃😄')",
-            "@emoji(3, 6)",
+            "@emoji(1, 3)",
             "@emoji('123🌘😷🙊★♠♫', 3, 6)"
         ]
     }
