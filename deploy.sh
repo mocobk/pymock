@@ -1,2 +1,5 @@
+#!/bin/bash
 python setup.py sdist build
-twine upload dist/py-mock-1.2.0.tar.gz
+file_name=`ls -lt ./dist | grep unicase-cli | head -n 1 | awk '{print $9}'`
+echo dist/${file_name}
+twine upload dist/${file_name}

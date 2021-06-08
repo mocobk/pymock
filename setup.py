@@ -9,7 +9,7 @@ with open("README.md", "r", encoding='utf-8') as fh:
 
 setuptools.setup(
     name="py-mock",
-    version="1.2.0",
+    version="1.2.1",
     author="mocobk",
     author_email="mailmzb@qq.com",
     description="Mock.js for Python3",
@@ -18,7 +18,7 @@ setuptools.setup(
     keywords="pymock,Mock,Mock.js,better-mock",
     url="https://github.com/mocobk/pymock",
     packages=['pymock'],
-    install_requires=['py-mini-racer'],
+    install_requires=['py-mini-racer==0.4.0'],
     classifiers=[
         "Programming Language :: Python :: 3 :: Only",
         "Programming Language :: Python :: 3.6",
